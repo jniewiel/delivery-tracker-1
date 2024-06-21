@@ -52,7 +52,6 @@
         </div>
         <div>
           <form action="/modify_delivery/<%= delivery.id %>" method="post">
-            <input type="hidden" name="_method" value="patch">
             <input type="hidden" name="query_status" value="received">
             <button>Mark as received</button>
           </form>
