@@ -1,9 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
 
-  root to: "deliveries#index"
-
-  get("/", { :controller => "users", :action => "index" })
+  root to: "users#sign_in"
 
   # Routes for the Delivery resource:
 
