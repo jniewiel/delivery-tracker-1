@@ -1,6 +1,6 @@
 class DeliveriesController < ApplicationController
   def index
-    matching_deliveries = Delivery.all
+    matching_deliveries = Delivery.where({ :user_id => current_user.id })
 
     @list_of_deliveries = matching_deliveries.order({ :created_at => :desc })
 
@@ -9,8 +9,7 @@ class DeliveriesController < ApplicationController
 
   def show
     the_id = params.fetch("path_id")
-
-    matching_deliveries = Delivery.where({ :id => the_id })
+    matching_deliveries = Delivery.where({ :id => the_id, :user_id => current_user.id })
 
     @the_delivery = matching_deliveries.at(0)
 
@@ -20,7 +19,7 @@ class DeliveriesController < ApplicationController
   def create
     the_delivery = Delivery.new
     the_delivery.status = params.fetch("query_status")
-    the_delivery.user_id = params.fetch("query_user_id")
+    the_delivery.user_id = current_user.id
 
     if the_delivery.valid?
       the_delivery.save
@@ -32,14 +31,14 @@ class DeliveriesController < ApplicationController
 
   def update
     the_id = params.fetch("path_id")
-    the_delivery = Delivery.where({ :id => the_id }).at(0)
+    matching_deliveries = Delivery.where({ :id => the_id, :user_id => current_user.id })
+    the_delivery = matching_deliveries.at(0)
 
     the_delivery.status = params.fetch("query_status")
-    the_delivery.user_id = params.fetch("query_user_id")
 
     if the_delivery.valid?
       the_delivery.save
-      redirect_to("/deliveries/#{the_delivery.id}", { :notice => "Delivery updated successfully."} )
+      redirect_to("/deliveries/#{the_delivery.id}", { :notice => "Delivery updated successfully."})
     else
       redirect_to("/deliveries/#{the_delivery.id}", { :alert => the_delivery.errors.full_messages.to_sentence })
     end
@@ -47,8 +46,10 @@ class DeliveriesController < ApplicationController
 
   def destroy
     the_id = params.fetch("path_id")
-    the_delivery = Delivery.where({ :id => the_id }).at(0)
+    matching_deliveries = Delivery.where({ :id => the_id, :user_id => current_user.id })
 
+    the_delivery = matching_deliveries.at(0)
+    
     the_delivery.destroy
 
     redirect_to("/deliveries", { :notice => "Delivery deleted successfully."} )
