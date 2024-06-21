@@ -10,4 +10,8 @@
 #
 class Delivery < ApplicationRecord
   belongs_to :user
+
+  validates :description, presence: true
+  validates :supposed_to_arrive_on, presence: true
+  validates :details, presence: true
 end
