@@ -13,7 +13,6 @@ Rails.application.routes.draw do
   # CREATE
   post("/insert_delivery", { :controller => "deliveries", :action => "create" })
 
-
   # UPDATE
   post("/modify_delivery/:path_id", { :controller => "deliveries", :action => "update" })
 
